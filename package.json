@@ -1,0 +1,23 @@
+{
+  "name": "berr2243",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DominicLau0410/BERR2243.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DominicLau0410/BERR2243/issues"
+  },
+  "homepage": "https://github.com/DominicLau0410/BERR2243#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
