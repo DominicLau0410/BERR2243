@@ -150,7 +150,7 @@ const PAYMENT_STATUS = Object.freeze({
 
 const ACCOUNT_STATUS = Object.freeze({
     ACTIVE: "active",
-    DEACTIVE: "deactive",
+    INACTIVE: "inactive",
     SUSPENDED: "suspended"
 });
 
@@ -165,7 +165,6 @@ const RIDE_STATUS = Object.freeze({
 const VEHICLE_STATUS = Object.freeze({
     ACTIVE: "active",
     INACTIVE: "inactive",
-    SUSPENDED: "suspended"
 });
 
 const VEHICLE_TYPE = Object.freeze({
@@ -189,6 +188,98 @@ const VEHICLE_TYPE = Object.freeze({
 function checkStatus(entity, expectedStatus) {
     if (!entity || !expectedStatus) return false;
     return entity.status === expectedStatus;
+}
+
+async function rideDetail( {rideId, authId, isAdmin = false}) {
+    const matchStage = isAdmin
+        ? { _id: rideId }
+        : {
+            _id: rideId,
+            $or: [
+                { userId: authId },
+                { driverId: authId }
+            ]
+        };
+    
+    const ride = await db.collection("rides").aggregate([
+            { $match: matchStage },
+
+            // Retrieve user info
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "userId",
+                    foreignField: "_id",
+                    as: "user"
+                }
+            },
+            { $unwind: "$user" },
+
+            // Retrieve driver info
+            {
+                $lookup: {
+                    from: "drivers",
+                    localField: "driverId",
+                    foreignField: "_id",
+                    as: "driver"
+                }
+            },
+            { $unwind: "$driver" },
+
+            // Retrieve driver vehicle detail
+            {
+                $lookup: {
+                    from: "vehicles",
+                    localField: "vehicleId",
+                    foreignField: "_id",
+                    as: "vehicle"
+                }
+            },
+            { $unwind: "$vehicle" },
+
+            // Projection to define which data can display to both user and driver of the rides
+            {
+                $project: {
+                    _id: 1,
+                    status: 1,
+                    bookingId: 1,
+                    acceptedAt: 1,
+                    arrivedAt: 1,
+                    startedAt: 1,
+                    completedAt: 1,
+                    distance: 1,
+                    duration: 1,
+                    fare: 1,
+
+                    user: {
+                        username: "$user.username",
+                        phone: "$user.phone",
+                    },
+
+                    driver: {
+                        username: "$driver.username",
+                        phone: "$driver.phone",
+                        rating: {
+                            $cond: [
+                                { $eq: ["$driver.ratingCount", 0] },
+                                null,
+                                { $divide: ["$driver.ratingSum", "$driver.ratingCount"] }
+                            ]
+                        },
+                    },
+
+                    vehicle: {
+                        vehicleType: "$vehicle.vehicleType",
+                        plateNumber: "$vehicle.plateNumber",
+                        brand: "$vehicle.brand",
+                        model: "$vehicle.model",
+                        color: "$vehicle.color"
+                    }
+                }
+            }
+        ]).toArray();
+
+    return ride[0] || null;
 }
 
 // ==========================
@@ -423,7 +514,46 @@ app.patch('/users/profile/:id', authenticate, authorize([ROLES.USER]), async (re
     }
 });
 
-// TODO : delete account by using PATCH to deactive status
+/**
+ * PATCH /users/profile/:id/deactivate
+ * Deactivate own user account
+ */
+app.patch('/users/profile/:id/deactivate', authenticate, authorize([ROLES.USER]), async (req, res) => {
+    try {
+        const collection = "users";
+        const userId = req.params.id;
+        
+        if (req.auth.id !== userId) {
+            return res.status(403).json({ error: "Forbidden" });
+        }
+
+        const updateData = {
+            status : ACCOUNT_STATUS.INACTIVE,
+            deactivatedAt : new Date()
+        }
+
+        const result = await db.collection(collection).updateOne(
+            {
+                _id: new ObjectId(userId),
+                status: ACCOUNT_STATUS.ACTIVE
+            },
+            { $set: updateData }
+        );
+
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ error: "User not found." });
+        }
+
+        return res.status(200).json({
+            message: "User deactivate successfully",
+            userId: userId,
+            status: ACCOUNT_STATUS.INACTIVE
+        });
+    } catch (err) {
+        console.error("Deactivate User Error:", err);
+        return res.status(500).json({ error: "Failed to deactivate account" });
+    }
+});
 
 /**
  * POST /users/booking
@@ -769,7 +899,7 @@ app.post('/drivers/register', async (req, res) => {
         // Hash the password before storing it to prevent plaintext password leaks
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         
-        // Prepare New user object to insert into database
+        // Prepare new driver object to insert into database
         const newAccount = {
             role : ROLES.DRIVER,
             username,
@@ -950,7 +1080,46 @@ app.patch('/drivers/profile/:id', authenticate, authorize([ROLES.DRIVER]), async
     }
 });
 
-// TODO : delete account by using PATCH to deactive status
+/**
+ * PATCH /drivers/profile/:id/deactivate
+ * Deactivate own user account
+ */
+app.patch('/drivers/profile/:id/deactivate', authenticate, authorize([ROLES.DRIVER]), async (req, res) => {
+    try {
+        const collection = "drivers";
+        const driverId = req.params.id;
+        
+        if (req.auth.id !== driverId) {
+            return res.status(403).json({ error: "Forbidden" });
+        }
+
+        const updateData = {
+            status : ACCOUNT_STATUS.INACTIVE,
+            deactivatedAt : new Date()
+        }
+
+        const result = await db.collection(collection).updateOne(
+            {
+                _id: new ObjectId(driverId),
+                status: ACCOUNT_STATUS.ACTIVE
+            },
+            { $set: updateData }
+        );
+
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ error: "Driver not found." });
+        }
+
+        return res.status(200).json({
+            message: "Driver deactivate successfully",
+            driverId: driverId,
+            status: ACCOUNT_STATUS.INACTIVE
+        });
+    } catch (err) {
+        console.error("Deactivate Driver Error:", err);
+        return res.status(500).json({ error: "Failed to deactivate account" });
+    }
+});
 
 /**
  * POST /drivers/vehicle
@@ -1362,114 +1531,34 @@ app.patch('/drivers/ride/:id/complete', authenticate, authorize([ROLES.DRIVER]),
  * Accessible by both driver and user.
  * Shows enriched info about the other party.
  */
+
 app.get('/rides/:id', authenticate, authorize([ROLES.USER, ROLES.DRIVER]), async (req, res) => {
     try {
         const rideId = new ObjectId(req.params.id);
-        const collection = "rides";
-
         const authId = new ObjectId(req.auth.id);
 
-        // Find ride and enrich info with $lookup
-        const ride = await db.collection(collection).aggregate([
-            {
-                $match: {
-                    _id: rideId,
-                    
-                    // Authorization procedure to ensure only relevent user and driver can access
-                    $or: [
-                        { userId: authId },
-                        { driverId: authId }
-                    ]
-                }
-            },
+        const ride = await rideDetail({
+            rideId, 
+            authId,
+            isAdmin : false
+        });
 
-            // Retrieve user info
-            {
-                $lookup: {
-                    from: "users",
-                    localField: "userId",
-                    foreignField: "_id",
-                    as: "user"
-                }
-            },
-            { $unwind: "$user" },
-
-            // Retrieve driver info
-            {
-                $lookup: {
-                    from: "drivers",
-                    localField: "driverId",
-                    foreignField: "_id",
-                    as: "driver"
-                }
-            },
-            { $unwind: "$driver" },
-
-            // Retrieve driver vehicle detail
-            {
-                $lookup: {
-                    from: "vehicles",
-                    localField: "vehicleId",
-                    foreignField: "_id",
-                    as: "vehicle"
-                }
-            },
-            { $unwind: "$vehicle" },
-
-            // Projection to define which data can display to both user and driver of the rides
-            {
-                $project: {
-                    _id: 1,
-                    status: 1,
-                    bookingId: 1,
-                    acceptedAt: 1,
-                    arrivedAt: 1,
-                    startedAt: 1,
-                    completedAt: 1,
-                    distance: 1,
-                    duration: 1,
-                    fare: 1,
-
-                    user: {
-                        username: "$user.username",
-                        phone: "$user.phone",
-                    },
-
-                    driver: {
-                        username: "$driver.username",
-                        phone: "$driver.phone",
-                        rating: {
-                            $cond: [
-                                { $eq: ["$driver.ratingCount", 0] },
-                                null,
-                                { $divide: ["$driver.ratingSum", "$driver.ratingCount"] }
-                            ]
-                        },
-                    },
-
-                    vehicle: {
-                        vehicleType: "$vehicle.vehicleType",
-                        plateNumber: "$vehicle.plateNumber",
-                        brand: "$vehicle.brand",
-                        model: "$vehicle.model",
-                        color: "$vehicle.color"
-                    }
-                }
-            }
-        ]).toArray();
-
-        if (ride.length === 0) {
-            return res.status(404).json({ error: "Ride not found or access denied" });
+        if (!ride || ride.length === 0) {
+            return res.status(404).json({
+                error: "Ride not found or access denied"
+            });
         }
 
         return res.status(200).json({
             message: "Ride retrieved successfully",
-            ride: ride[0]
+            ride
         });
 
     } catch (err) {
         console.error("View Ride Error:", err);
-        return res.status(500).json({ error: "Failed to retrieve ride" });
+        return res.status(500).json({
+            error: "Failed to retrieve ride"
+        });
     }
 });
 
@@ -1512,6 +1601,639 @@ app.patch('/rides/:id/cancel', authenticate, authorize([ROLES.USER, ROLES.DRIVER
         });
     } catch (err) {
         console.error("Cancel Ride Error:", err);
+        return res.status(500).json({ error: "Failed to cancel ride" });
+    }
+});
+
+
+// ==========================
+// ADMINS
+// ==========================
+
+/**
+ * POST /admins/register
+ * Internal admin registration
+ */
+app.post('/admins/register', async (req, res) => {
+    try {
+        const collection = "admins";
+
+        // Destructure input from request body
+        const { username, email, password } = req.body;
+
+        if (!username || !email || !password ) {
+            return res.status(400).json({ error: "Missing information." });
+        }
+
+        // Check whether the email already exists in the database
+        const existingAcc = await db.collection(collection).findOne({ email: email });
+        if (existingAcc) {
+            return res.status(409).json({ error: "Account already registered." });
+        }
+
+        // Hash the password before storing it to prevent plaintext password leaks
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        
+        // Prepare new driver object to insert into database
+        const newAccount = {
+            role : ROLES.ADMIN,
+            username,
+            email,
+            password: hashedPassword,
+            createdAt: new Date(),
+            status : ACCOUNT_STATUS.ACTIVE
+        };
+
+        // Insert new admin document into MongoDB
+        const result = await db.collection(collection).insertOne(newAccount);
+
+        // Return success response with minimal user info (without password)
+        return res.status(201).json({
+            message: `Admin registered successfully`,
+            id: result.insertedId,
+            username,
+            email
+        });
+
+    } catch (err) {
+        console.error("Register Error:", err);
+        res.status(500).json({ error: "Registration failed." });
+    }
+});
+
+/**
+ * POST /admins/login
+ * Authenticates admin credentials and returns a JWT token.
+ */
+app.post('/admins/login', async (req, res) => {
+    try {
+        const collection = "admins";
+        const { email, password } = req.body;
+        
+        if (!email || !password) {
+            return res.status(400).json({ error: "Email and password are required." });
+        }
+
+        const existingAcc = await db.collection(collection).findOne({ email: email });
+        if (!existingAcc) {
+            return res.status(404).json({ error: "Admin not registered." });
+        }
+
+        if (!checkStatus(existingAcc, ACCOUNT_STATUS.ACTIVE)) {
+            return res.status(403).json({ error: "Account not active" });
+        }
+
+        const isMatch = await bcrypt.compare(password, existingAcc.password);
+        if (!isMatch) {
+            return res.status(401).json({ error: "Invalid credentials." });
+        }
+
+        const token = jwt.sign(
+            {
+                id: existingAcc._id.toString(),
+                role: existingAcc.role
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: process.env.JWT_EXPIRES_IN }
+        );
+
+        return res.status(200).json({
+            message: "Login successful",
+            token,
+            admin: {
+                id: existingAcc._id,
+                username: existingAcc.username,
+                email: existingAcc.email
+            }
+        });
+
+    } catch (err) {
+        console.error("Login Error:", err);
+        return res.status(500).json({ error: "Failed to login." });
+    }
+});
+
+/**
+ * GET /admins/user
+ * Retrieve all users
+ */
+app.get('/admins/user', authenticate, authorize([ROLES.ADMIN]), async (req, res) => {
+    try {
+        const collection = "users";
+
+        const users = await db.collection(collection).find(
+            {}, 
+            { projection: { _id: 1, username: 1, phone: 1, email: 1, status: 1 } }
+        ).toArray();
+
+        return res.status(200).json({
+            message: "Users retrieved successfully",
+            users
+        });
+
+    } catch (err) {
+        console.error("Get Users Error:", err);
+        return res.status(500).json({ error: "Failed to retrieve users" });
+    }
+});
+
+/**
+ * GET /admins/user/:id
+ * Retrieve a single user by ID
+ */
+app.get('/admins/user/:id', authenticate, authorize([ROLES.ADMIN]), async (req, res) => {
+    try {
+        const collection = "users";
+        const userId = new ObjectId(req.params.id);
+
+        const userDetails = await db.collection(collection).aggregate([
+            { $match: { _id: userId } },
+            {
+                $lookup: {
+                from: "bookings",
+                localField: "_id",
+                foreignField: "userId",
+                as: "bookings"
+                }
+            },
+            {
+                $lookup: {
+                from: "rides",
+                localField: "_id",
+                foreignField: "userId",
+                as: "rides"
+                }
+            },
+            {
+                $lookup: {
+                from: "payments",
+                localField: "_id",
+                foreignField: "userId",
+                as: "payments"
+                }
+            },
+            {
+                $lookup: {
+                from: "ratings",
+                localField: "_id",
+                foreignField: "userId",
+                as: "ratings"
+                }
+            },
+            { $project: { password: 0 } }
+            ]).toArray();
+
+        if (!userDetails || userDetails.length === 0) {
+            return res.status(404).json({ error: "Driver not found" });
+        }
+
+        return res.status(200).json({
+            message: "User retrieved successfully",
+            user: userDetails[0]
+        });
+
+    } catch (err) {
+        console.error("Get User Error:", err);
+        return res.status(500).json({ error: "Failed to retrieve user" });
+    }
+});
+
+/**
+ * PATCH /admins/user/:id
+ * Update user details, including password
+ */
+app.patch('/admins/user/:id', authenticate, authorize([ROLES.ADMIN]), async (req, res) => {
+    try {
+        const collection = "users";
+        const userId = new ObjectId(req.params.id);
+
+        const allowedFields = [
+            "username",
+            "phone",
+            "preferPay",
+            "bankAccountNumber",
+            "password"
+        ];
+
+        const updateData = {};
+
+        for (const field of allowedFields) {
+            if (req.body[field] !== undefined) {
+                if (field === "password") {
+                    updateData.password = await bcrypt.hash(req.body.password, saltRounds);
+                } else {
+                    updateData[field] = req.body[field];
+                }
+            }
+        }
+
+        if (Object.keys(updateData).length === 0) {
+            return res.status(400).json({ error: "No valid fields provided for update" });
+        }
+
+        const result = await db.collection(collection).updateOne(
+            { _id: userId },
+            { $set: updateData }
+        );
+
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        return res.status(200).json({
+            message: "User updated successfully",
+            updatedFields: Object.keys(updateData).filter(f => f !== "password") // Ignore password for security
+        });
+
+    } catch (err) {
+        console.error("Update User Error:", err);
+        return res.status(500).json({ error: "Failed to update user" });
+    }
+})
+
+/**
+ * PATCH /admins/user/:id/suspend
+ * Deactivate user account without deleting
+ */
+app.patch('/admins/user/:id/suspend', authenticate, authorize([ROLES.ADMIN]), async (req, res) => {
+    try {
+        const collection = "users";
+        const userId = new ObjectId(req.params.id);
+
+        const updateData = {
+            status: ACCOUNT_STATUS.SUSPENDED, 
+            suspendedAt: new Date()
+        };
+
+        const result = await db.collection(collection).updateOne(
+            { 
+                _id: userId, 
+                status: ACCOUNT_STATUS.ACTIVE 
+            },
+            { $set: updateData }
+        );
+
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ error: "User not found or already inactive" });
+        }
+
+        return res.status(200).json({
+            message: "User deactivated successfully",
+            userId,
+            status: ACCOUNT_STATUS.SUSPENDED
+        });
+
+    } catch (err) {
+        console.error("Deactivate User Error:", err);
+        return res.status(500).json({ error: "Failed to deactivate user" });
+    }
+});
+
+/**
+ * PATCH /admins/user/:id/activate
+ * Reactivate user account
+ */
+app.patch('/admins/user/:id/activate', authenticate, authorize([ROLES.ADMIN]), async (req, res) => {
+    try {
+        const collection = "users";
+        const userId = new ObjectId(req.params.id);
+
+        const updateData = {
+            status: ACCOUNT_STATUS.ACTIVE,
+            suspendedAt: null
+        };
+
+        const result = await db.collection(collection).updateOne(
+            { 
+                _id: userId, 
+                status: ACCOUNT_STATUS.SUSPENDED 
+            },
+            { $set: updateData }
+        );
+
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ error: "User not found or already active" });
+        }
+
+        return res.status(200).json({
+            message: "User reactivated successfully",
+            userId,
+            status: ACCOUNT_STATUS.ACTIVE
+        });
+
+    } catch (err) {
+        console.error("Activate User Error:", err);
+        return res.status(500).json({ error: "Failed to reactivate user" });
+    }
+});
+
+/**
+ * GET /admins/driver
+ * Retrieve all drivers
+ */
+app.get('/admins/driver', authenticate, authorize([ROLES.ADMIN]), async (req, res) => {
+    try {
+        const collection = "drivers";
+
+        const drivers = await db.collection(collection).find(
+            {}, 
+            { projection: { _id: 1, username: 1, phone: 1, email: 1, status: 1 } }
+        ).toArray();
+
+        return res.status(200).json({
+            message: "Drivers retrieved successfully",
+            drivers
+        });
+
+    } catch (err) {
+        console.error("Get Drivers Error:", err);
+        return res.status(500).json({ error: "Failed to retrieve drivers" });
+    }
+});
+
+/**
+ * GET /admins/driver/:id
+ * Retrieve a single user by ID
+ */
+app.get('/admins/driver/:id', authenticate, authorize([ROLES.ADMIN]), async (req, res) => {
+    try {
+        const collection = "drivers";
+        const driverId = req.params.id;
+
+        const driverDetails = await db.collection(collection).aggregate([
+            { $match: { _id: new ObjectId(driverId) } },
+            {
+                $lookup: {
+                from: "vehicles",
+                localField: "_id",
+                foreignField: "driverId",
+                as: "vehicles"
+                }
+            },
+            {
+                $lookup: {
+                from: "rides",
+                localField: "_id",
+                foreignField: "driverId",
+                as: "rides"
+                }
+            },
+            {
+                $lookup: {
+                from: "payments",
+                localField: "_id",
+                foreignField: "driverId",
+                as: "payments"
+                }
+            },
+            {
+                $lookup: {
+                from: "ratings",
+                localField: "_id",
+                foreignField: "driverId",
+                as: "ratings"
+                }
+            },
+            { $project: { password: 0 } }
+            ]).toArray();
+
+        if (!driverDetails || driverDetails.length === 0) {
+            return res.status(404).json({ error: "Driver not found" });
+        }
+
+        return res.status(200).json({
+            message: "Driver retrieved successfully",
+            driver: driverDetails[0]
+        });
+
+    } catch (err) {
+        console.error("Get Driver Error:", err);
+        return res.status(500).json({ error: "Failed to retrieve driver" });
+    }
+});
+
+/**
+ * PATCH /admins/driver/:id
+ * Update driver details, including password
+ */
+app.patch('/admins/driver/:id', authenticate, authorize([ROLES.ADMIN]), async (req, res) => {
+    try {
+        const collection = "drivers";
+        const driverId = req.params.id;
+
+        const allowedFields = [
+            "username",
+            "phone",
+            "licenseNumber",
+            "licenseExpiry",
+            "bankAccountNumber",
+            "password"
+        ];
+
+        const updateData = {};
+
+        for (const field of allowedFields) {
+            if (req.body[field] !== undefined) {
+                if (field === "password") {
+                    updateData.password = await bcrypt.hash(req.body.password, saltRounds);
+                } else {
+                    updateData[field] = req.body[field];
+                }
+            }
+        }
+
+        if (Object.keys(updateData).length === 0) {
+            return res.status(400).json({ error: "No valid fields provided for update" });
+        }
+
+        const result = await db.collection(collection).updateOne(
+            { _id: new ObjectId(driverId) },
+            { $set: updateData }
+        );
+
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ error: "Driver not found" });
+        }
+
+        return res.status(200).json({
+            message: "Driver updated successfully",
+            updatedFields: Object.keys(updateData).filter(f => f !== "password") // Ignore password for security
+        });
+
+    } catch (err) {
+        console.error("Update Driver Error:", err);
+        return res.status(500).json({ error: "Failed to update driver" });
+    }
+})
+
+/**
+ * PATCH /admins/driver/:id/suspend
+ * Deactivate driver account without deleting
+ */
+app.patch('/admins/driver/:id/suspend', authenticate, authorize([ROLES.ADMIN]), async (req, res) => {
+    try {
+        const collection = "drivers";
+        const driverId = req.params.id;
+
+        const updateData = {
+            status: ACCOUNT_STATUS.SUSPENDED, 
+            suspendedAt: new Date()
+        };
+
+        const result = await db.collection(collection).updateOne(
+            { 
+                _id: new ObjectId(driverId), 
+                status: ACCOUNT_STATUS.ACTIVE 
+            },
+            { $set: updateData }
+        );
+
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ error: "Driver not found or already inactive" });
+        }
+
+        return res.status(200).json({
+            message: "Driver deactivated successfully",
+            driverId,
+            status: ACCOUNT_STATUS.SUSPENDED
+        });
+
+    } catch (err) {
+        console.error("Deactivate Driver Error:", err);
+        return res.status(500).json({ error: "Failed to deactivate driver" });
+    }
+});
+
+/**
+ * PATCH /admins/driver/:id/activate
+ * Reactivate driver account
+ */
+app.patch('/admins/driver/:id/activate', authenticate, authorize([ROLES.ADMIN]), async (req, res) => {
+    try {
+        const collection = "drivers";
+        const driverId = req.params.id;
+
+        const updateData = {
+            status: ACCOUNT_STATUS.ACTIVE,
+            suspendedAt: null
+        };
+
+        const result = await db.collection(collection).updateOne(
+            { 
+                _id: new ObjectId(driverId), 
+                status: ACCOUNT_STATUS.SUSPENDED 
+            },
+            { $set: updateData }
+        );
+
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ error: "Driver not found or already active" });
+        }
+
+        return res.status(200).json({
+            message: "Driver reactivated successfully",
+            driverId,
+            status: ACCOUNT_STATUS.ACTIVE
+        });
+
+    } catch (err) {
+        console.error("Activate Driver Error:", err);
+        return res.status(500).json({ error: "Failed to reactivate driver" });
+    }
+});
+
+/**
+ * GET /admins/ride
+ * Retrieve all ride
+ */
+app.get('/admins/ride', authenticate, authorize([ROLES.ADMIN]), async (req, res) => {
+    try {
+        const collection = "rides";
+
+        const rides = await db.collection(collection).find(
+            {}, 
+            { projection: { _id: 1, userId: 1, driverId: 1, vehicleId: 1, distance: 1, duration: 1, fare: 1, status: 1 } }
+        ).toArray();
+
+        return res.status(200).json({
+            message: "Rides retrieved successfully",
+            rides
+        });
+
+    } catch (err) {
+        console.error("Get Rides Error:", err);
+        return res.status(500).json({ error: "Failed to retrieve rides" });
+    }
+});
+
+/**
+ * GET /admins/ride/:id
+ * Retrieve ride detail (admin)
+ */
+app.get('/admins/ride/:id', authenticate, authorize([ROLES.ADMIN]), async (req, res) => {
+    try {
+        const rideId = new ObjectId(req.params.id);
+
+        const ride = await rideDetail({
+            rideId,
+            isAdmin: true
+        });
+
+        if (!ride || ride.length === 0) {
+            return res.status(404).json({
+                error: "Ride not found or access denied"
+            });
+        }
+
+        return res.status(200).json({
+            message: "Ride retrieved successfully",
+            ride
+        });
+
+    } catch (err) {
+        console.error("View Ride Error:", err);
+        return res.status(500).json({
+            error: "Failed to retrieve ride"
+        });
+    }
+});
+
+/**
+ * PATCH /admins/ride/:id/cancel
+ * Admin force cancel a ride
+ */
+app.patch('/admins/ride/:id/cancel', authenticate, authorize([ROLES.ADMIN]), async (req, res) => {
+    try {
+        const collection = "rides";
+        const rideId = new ObjectId(req.params.id);
+
+        const result = await db.collection(collection).updateOne(
+            {
+                _id: rideId,
+                status: { $in: [RIDE_STATUS.ACCEPTED, RIDE_STATUS.ONGOING] }
+            },
+            {
+                $set: {
+                    status: RIDE_STATUS.CANCELLED,
+                    cancelledAt: new Date(),
+                    cancelledBy: "ADMIN"
+                }
+            }
+        );
+
+        if (result.matchedCount === 0) {
+            return res.status(404).json({
+                error: "Ride not found or cannot be cancelled"
+            });
+        }
+
+        return res.status(200).json({
+            message: "Ride cancelled by admin",
+            rideId
+        });
+
+    } catch (err) {
+        console.error("Admin Cancel Ride Error:", err);
         return res.status(500).json({ error: "Failed to cancel ride" });
     }
 });
