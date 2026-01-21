@@ -1,0 +1,1582 @@
+{
+  "info": {
+    "_postman_id": "8aff705c-4aaa-4acc-8413-819760fd51f0",
+    "name": "BERR2242_Assignment",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "49659522",
+    "_collection_link": "https://go.postman.co/collection/49659522-8aff705c-4aaa-4acc-8413-819760fd51f0?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "/users",
+      "item": [
+        {
+          "name": "/users/register",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Transfer-Encoding",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\" : \"Alice\",\r\n    \"phone\" : \"012-3456789\",\r\n    \"email\" : \"alice@wonderland.com\",\r\n    \"password\" : \"AliceInWonderland\",\r\n    \"preferPay\" : \"cash\",\r\n    \"bankAccountNumber\" : \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/users/register",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "users",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/users/login",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\" : \"alice@wonderland.com\",\r\n    \"password\" : \"AliceInWonderland\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/users/login",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "users",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/users/profile/:id",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg1NGZmOTU0MzJmM2RmYTk4ODU4NyIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzY4NDQ1MjgxLCJleHAiOjE3Njg1MzE2ODF9.Xi1Tb-DoVrIRPOnBr5-3tNrB7-gdnM0lax3tU8G76ag",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/users/profile/696854ff95432f3dfa988587",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "users",
+                "profile",
+                "696854ff95432f3dfa988587"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/users/profile/:id",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg1NGZmOTU0MzJmM2RmYTk4ODU4NyIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzY4NDQ1MjgxLCJleHAiOjE3Njg1MzE2ODF9.Xi1Tb-DoVrIRPOnBr5-3tNrB7-gdnM0lax3tU8G76ag",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\" : \"Alice Smith\",\r\n    \"email\" : \"alice@gmail.com\",\r\n    \"preferPay\" : \"bank\",\r\n    \"bankAccountNumber\" : \"1357 2468 1011\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/users/profile/696854ff95432f3dfa988587",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "users",
+                "profile",
+                "696854ff95432f3dfa988587"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/users/profile/:id/deactivate",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg1NGZmOTU0MzJmM2RmYTk4ODU4NyIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzY4NDQ1MjgxLCJleHAiOjE3Njg1MzE2ODF9.Xi1Tb-DoVrIRPOnBr5-3tNrB7-gdnM0lax3tU8G76ag",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\" : \"alice@wonderland.com\",\r\n    \"password\" : \"12345678\"\r\n}"
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/users/profile/696854ff95432f3dfa988587/deactivate",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "users",
+                "profile",
+                "696854ff95432f3dfa988587",
+                "deactivate"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/users/booking",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg1NGZmOTU0MzJmM2RmYTk4ODU4NyIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzY4NDQ1MjgxLCJleHAiOjE3Njg1MzE2ODF9.Xi1Tb-DoVrIRPOnBr5-3tNrB7-gdnM0lax3tU8G76ag",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"pickupLocation\" : \"UTeM\",\r\n    \"dropoffLocation\" : \"Aeon Bandaraya\",\r\n    \"requestedVehicleType\" : \"6 people car\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/users/booking",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "users",
+                "booking"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/users/booking/:id",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg1NGZmOTU0MzJmM2RmYTk4ODU4NyIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzY4NDQ1MjgxLCJleHAiOjE3Njg1MzE2ODF9.Xi1Tb-DoVrIRPOnBr5-3tNrB7-gdnM0lax3tU8G76ag",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/users/booking/696856dc95432f3dfa988588",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "users",
+                "booking",
+                "696856dc95432f3dfa988588"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/users/booking/:id",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg1NGZmOTU0MzJmM2RmYTk4ODU4NyIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzY4NDQ1MjgxLCJleHAiOjE3Njg1MzE2ODF9.Xi1Tb-DoVrIRPOnBr5-3tNrB7-gdnM0lax3tU8G76ag",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"requestedVehicleType\" : \"6 people car\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/users/booking/696856dc95432f3dfa988588",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "users",
+                "booking",
+                "696856dc95432f3dfa988588"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/users/booking/:id/cancel",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg1NGZmOTU0MzJmM2RmYTk4ODU4NyIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzY4NDQ1MjgxLCJleHAiOjE3Njg1MzE2ODF9.Xi1Tb-DoVrIRPOnBr5-3tNrB7-gdnM0lax3tU8G76ag",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/users/booking/696856dc95432f3dfa988588/cancel",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "users",
+                "booking",
+                "696856dc95432f3dfa988588",
+                "cancel"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/users/ride/:id/payment",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg1NGZmOTU0MzJmM2RmYTk4ODU4NyIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzY4NDQ1MjgxLCJleHAiOjE3Njg1MzE2ODF9.Xi1Tb-DoVrIRPOnBr5-3tNrB7-gdnM0lax3tU8G76ag",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"paymentMethod\" : \"bank\",\r\n    \"transactionReferences\" : \"MCU01152026\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/users/ride/69685f3f95432f3dfa98858c/payment",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "users",
+                "ride",
+                "69685f3f95432f3dfa98858c",
+                "payment"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/users/ride/:id/rating",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg1NGZmOTU0MzJmM2RmYTk4ODU4NyIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzY4NDQ1MjgxLCJleHAiOjE3Njg1MzE2ODF9.Xi1Tb-DoVrIRPOnBr5-3tNrB7-gdnM0lax3tU8G76ag",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"rating\" : 5,\r\n    \"comment\" : \"Driver is friendly\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/users/ride/69685f3f95432f3dfa98858c/rating",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "users",
+                "ride",
+                "69685f3f95432f3dfa98858c",
+                "rating"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "/drivers",
+      "item": [
+        {
+          "name": "/drivers/register",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\" : \"John\",\r\n    \"phone\" : \"011-12345678\",\r\n    \"email\" : \"john@gmail.com\",\r\n    \"password\" : \"john123\",\r\n    \"licenseNumber\" : \"246810\",\r\n    \"licenseExpiry\" : \"11-11-2030\",\r\n    \"bankAccountNumber\" : \"2468 1357 1011\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/drivers/register",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "drivers",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/drivers/login",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\" : \"john@gmail.com\",\r\n    \"password\" : \"john123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/drivers/login",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "drivers",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/drivers/profile/:id",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg1Y2M2OTU0MzJmM2RmYTk4ODU4YSIsInJvbGUiOiJkcml2ZXIiLCJpYXQiOjE3Njg0NDcyMjMsImV4cCI6MTc2ODUzMzYyM30.32hINq6mTPxet-KvwH3h5w1xYnnYKuBpqauawKGfk88",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/drivers/profile/69685cc695432f3dfa98858a",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "drivers",
+                "profile",
+                "69685cc695432f3dfa98858a"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/drivers/profile/:id",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg1Y2M2OTU0MzJmM2RmYTk4ODU4YSIsInJvbGUiOiJkcml2ZXIiLCJpYXQiOjE3Njg0NDcyMjMsImV4cCI6MTc2ODUzMzYyM30.32hINq6mTPxet-KvwH3h5w1xYnnYKuBpqauawKGfk88",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\" : \"John Doe\",\r\n    \"phone\" : \"011-24681357\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/drivers/profile/69685cc695432f3dfa98858a",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "drivers",
+                "profile",
+                "69685cc695432f3dfa98858a"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/drivers/profile/:id/deactivate",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg1Y2M2OTU0MzJmM2RmYTk4ODU4YSIsInJvbGUiOiJkcml2ZXIiLCJpYXQiOjE3Njg0NDcyMjMsImV4cCI6MTc2ODUzMzYyM30.32hINq6mTPxet-KvwH3h5w1xYnnYKuBpqauawKGfk88",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/drivers/profile/69685cc695432f3dfa98858a/deactivate",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "drivers",
+                "profile",
+                "69685cc695432f3dfa98858a",
+                "deactivate"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/drivers/vehicle",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg1Y2M2OTU0MzJmM2RmYTk4ODU4YSIsInJvbGUiOiJkcml2ZXIiLCJpYXQiOjE3Njg0NDcyMjMsImV4cCI6MTc2ODUzMzYyM30.32hINq6mTPxet-KvwH3h5w1xYnnYKuBpqauawKGfk88",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"plateNumber\" : \"BJT 2222\",\r\n    \"vehicleType\" : \"4 people car\",\r\n    \"brand\" : \"BMW\",\r\n    \"model\" : \"001\",\r\n    \"color\" : \"black\",\r\n    \"inspectionExpiry\" : \"01-04-2026\",\r\n    \"roadtaxExpiry\" : \"01-04-2026\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/drivers/vehicle",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "drivers",
+                "vehicle"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/drivers/vehicle/:id",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg1Y2M2OTU0MzJmM2RmYTk4ODU4YSIsInJvbGUiOiJkcml2ZXIiLCJpYXQiOjE3Njg0NDcyMjMsImV4cCI6MTc2ODUzMzYyM30.32hINq6mTPxet-KvwH3h5w1xYnnYKuBpqauawKGfk88",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/drivers/vehicle/69685da795432f3dfa98858b",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "drivers",
+                "vehicle",
+                "69685da795432f3dfa98858b"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/drivers/vehicle/:id",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg1Y2M2OTU0MzJmM2RmYTk4ODU4YSIsInJvbGUiOiJkcml2ZXIiLCJpYXQiOjE3Njg0NDcyMjMsImV4cCI6MTc2ODUzMzYyM30.32hINq6mTPxet-KvwH3h5w1xYnnYKuBpqauawKGfk88",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"roadtaxExpiry\" : \"01-04-2027\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/drivers/vehicle/69685da795432f3dfa98858b",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "drivers",
+                "vehicle",
+                "69685da795432f3dfa98858b"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/drivers/vehicle/:id/deactivate",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5NjNhNGJjMDE0YWJlYzNjYmU4YzY3OCIsInJvbGUiOiJkcml2ZXIiLCJpYXQiOjE3NjgxMzc5MzIsImV4cCI6MTc2ODIyNDMzMn0.vtofwDPg0aeb3ag34Pqr5-y6kkWPTgko8YKwcRzkr2o",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/drivers/vehicle/6963a651014abec3cbe8c679/deactivate",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "drivers",
+                "vehicle",
+                "6963a651014abec3cbe8c679",
+                "deactivate"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/drivers/booking",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg1Y2M2OTU0MzJmM2RmYTk4ODU4YSIsInJvbGUiOiJkcml2ZXIiLCJpYXQiOjE3Njg0NDcyMjMsImV4cCI6MTc2ODUzMzYyM30.32hINq6mTPxet-KvwH3h5w1xYnnYKuBpqauawKGfk88",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/drivers/booking",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "drivers",
+                "booking"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/drivers/booking/:id/accept",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg1Y2M2OTU0MzJmM2RmYTk4ODU4YSIsInJvbGUiOiJkcml2ZXIiLCJpYXQiOjE3Njg0NDcyMjMsImV4cCI6MTc2ODUzMzYyM30.32hINq6mTPxet-KvwH3h5w1xYnnYKuBpqauawKGfk88",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/drivers/booking/69685c6c95432f3dfa988589/accept",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "drivers",
+                "booking",
+                "69685c6c95432f3dfa988589",
+                "accept"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/drivers/ride/:id/start",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg1Y2M2OTU0MzJmM2RmYTk4ODU4YSIsInJvbGUiOiJkcml2ZXIiLCJpYXQiOjE3Njg0NDcyMjMsImV4cCI6MTc2ODUzMzYyM30.32hINq6mTPxet-KvwH3h5w1xYnnYKuBpqauawKGfk88",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/drivers/ride/69685f3f95432f3dfa98858c/start",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "drivers",
+                "ride",
+                "69685f3f95432f3dfa98858c",
+                "start"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/drivers/ride/:id/complete",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg1Y2M2OTU0MzJmM2RmYTk4ODU4YSIsInJvbGUiOiJkcml2ZXIiLCJpYXQiOjE3Njg0NDcyMjMsImV4cCI6MTc2ODUzMzYyM30.32hINq6mTPxet-KvwH3h5w1xYnnYKuBpqauawKGfk88",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/drivers/ride/69685f3f95432f3dfa98858c/complete",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "drivers",
+                "ride",
+                "69685f3f95432f3dfa98858c",
+                "complete"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "/rides",
+      "item": [
+        {
+          "name": "/rides/:id",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg1Y2M2OTU0MzJmM2RmYTk4ODU4YSIsInJvbGUiOiJkcml2ZXIiLCJpYXQiOjE3Njg0NDcyMjMsImV4cCI6MTc2ODUzMzYyM30.32hINq6mTPxet-KvwH3h5w1xYnnYKuBpqauawKGfk88",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/rides/69685f3f95432f3dfa98858c",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "rides",
+                "69685f3f95432f3dfa98858c"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/rides/:id/cancel",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg1Y2M2OTU0MzJmM2RmYTk4ODU4YSIsInJvbGUiOiJkcml2ZXIiLCJpYXQiOjE3Njg0NDcyMjMsImV4cCI6MTc2ODUzMzYyM30.32hINq6mTPxet-KvwH3h5w1xYnnYKuBpqauawKGfk88",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/rides/69685f3f95432f3dfa98858c/cancel",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "rides",
+                "69685f3f95432f3dfa98858c",
+                "cancel"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "/admins",
+      "item": [
+        {
+          "name": "/admins/register",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\" : \"ad0001\",\r\n    \"email\" : \"ad0001@mytexi.com\",\r\n    \"password\" : \"ad0001mytexi\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/admins/register",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "admins",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/admins/login",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\" : \"ad0001@mytexi.com\",\r\n    \"password\" : \"ad0001mytexi\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/admins/login",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "admins",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/admins/user",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg2NjU3OTU0MzJmM2RmYTk4ODU4ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc2ODQ0OTY0NiwiZXhwIjoxNzY4NTM2MDQ2fQ.ycn3j9221JvGx_QwjjbWUTu_MwJ4O827YgbshpN34mc",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/admins/user",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "admins",
+                "user"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/admins/user/:id",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njc3ZmI2YmY4OTNhYzk0YzkwZTNjNCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc2ODM5MDY0MSwiZXhwIjoxNzY4NDc3MDQxfQ.kSucjsHVEM_B3zuCv9UQCDLy8q0J10erO9Gtw_J9_L8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/admins/user/696854ff95432f3dfa988587",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "admins",
+                "user",
+                "696854ff95432f3dfa988587"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/admins/user/:id",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg2NjU3OTU0MzJmM2RmYTk4ODU4ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc2ODQ0OTY0NiwiZXhwIjoxNzY4NTM2MDQ2fQ.ycn3j9221JvGx_QwjjbWUTu_MwJ4O827YgbshpN34mc",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"password\" : \"12345678\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/admins/user/696854ff95432f3dfa988587",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "admins",
+                "user",
+                "696854ff95432f3dfa988587"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/admins/user/:id/suspend",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg2NjU3OTU0MzJmM2RmYTk4ODU4ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc2ODQ0OTY0NiwiZXhwIjoxNzY4NTM2MDQ2fQ.ycn3j9221JvGx_QwjjbWUTu_MwJ4O827YgbshpN34mc",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/admins/user/696854ff95432f3dfa988587/suspend",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "admins",
+                "user",
+                "696854ff95432f3dfa988587",
+                "suspend"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/admins/user/:id/activate",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg2NjU3OTU0MzJmM2RmYTk4ODU4ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc2ODQ0OTY0NiwiZXhwIjoxNzY4NTM2MDQ2fQ.ycn3j9221JvGx_QwjjbWUTu_MwJ4O827YgbshpN34mc",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/admins/user/696854ff95432f3dfa988587/activate",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "admins",
+                "user",
+                "696854ff95432f3dfa988587",
+                "activate"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/admins/driver",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njg2NjU3OTU0MzJmM2RmYTk4ODU4ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc2ODQ0OTY0NiwiZXhwIjoxNzY4NTM2MDQ2fQ.ycn3j9221JvGx_QwjjbWUTu_MwJ4O827YgbshpN34mc",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/admins/driver",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "admins",
+                "driver"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/admins/driver/:id",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njc3ZmI2YmY4OTNhYzk0YzkwZTNjNCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc2ODM5MDY0MSwiZXhwIjoxNzY4NDc3MDQxfQ.kSucjsHVEM_B3zuCv9UQCDLy8q0J10erO9Gtw_J9_L8",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/admins/driver/6965ccb4411d1ae6093baa2f",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "admins",
+                "driver",
+                "6965ccb4411d1ae6093baa2f"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/admins/driver/:id",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njc3ZmI2YmY4OTNhYzk0YzkwZTNjNCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc2ODM5MDY0MSwiZXhwIjoxNzY4NDc3MDQxfQ.kSucjsHVEM_B3zuCv9UQCDLy8q0J10erO9Gtw_J9_L8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"password\" : \"12345678\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/admins/driver/6965ccb4411d1ae6093baa2f",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "admins",
+                "driver",
+                "6965ccb4411d1ae6093baa2f"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/admins/driver/:id/suspend",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njc3ZmI2YmY4OTNhYzk0YzkwZTNjNCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc2ODM5MDY0MSwiZXhwIjoxNzY4NDc3MDQxfQ.kSucjsHVEM_B3zuCv9UQCDLy8q0J10erO9Gtw_J9_L8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/admins/driver/6965ccb4411d1ae6093baa2f/suspend",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "admins",
+                "driver",
+                "6965ccb4411d1ae6093baa2f",
+                "suspend"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/admins/driver/:id/activate",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njc3ZmI2YmY4OTNhYzk0YzkwZTNjNCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc2ODM5MDY0MSwiZXhwIjoxNzY4NDc3MDQxfQ.kSucjsHVEM_B3zuCv9UQCDLy8q0J10erO9Gtw_J9_L8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/admins/driver/6965ccb4411d1ae6093baa2f/activate",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "admins",
+                "driver",
+                "6965ccb4411d1ae6093baa2f",
+                "activate"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/admins/ride",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njc3ZmI2YmY4OTNhYzk0YzkwZTNjNCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc2ODM5MDY0MSwiZXhwIjoxNzY4NDc3MDQxfQ.kSucjsHVEM_B3zuCv9UQCDLy8q0J10erO9Gtw_J9_L8",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/admins/ride",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "admins",
+                "ride"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/admins/ride/:id",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njc3ZmI2YmY4OTNhYzk0YzkwZTNjNCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc2ODM5MDY0MSwiZXhwIjoxNzY4NDc3MDQxfQ.kSucjsHVEM_B3zuCv9UQCDLy8q0J10erO9Gtw_J9_L8",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/admins/ride/6965e12caf5a34688c187902",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "admins",
+                "ride",
+                "6965e12caf5a34688c187902"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/admins/ride/:id/cancel",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Njc3ZmI2YmY4OTNhYzk0YzkwZTNjNCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc2ODM5MDY0MSwiZXhwIjoxNzY4NDc3MDQxfQ.kSucjsHVEM_B3zuCv9UQCDLy8q0J10erO9Gtw_J9_L8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://berr2243exercise-hpc5dbc9etaraqgz.eastasia-01.azurewebsites.net/admins/ride/6965e12caf5a34688c187902/cancel",
+              "protocol": "https",
+              "host": [
+                "berr2243exercise-hpc5dbc9etaraqgz",
+                "eastasia-01",
+                "azurewebsites",
+                "net"
+              ],
+              "path": [
+                "admins",
+                "ride",
+                "6965e12caf5a34688c187902",
+                "cancel"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "BERR2243",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}
